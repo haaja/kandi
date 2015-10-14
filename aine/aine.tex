@@ -71,11 +71,44 @@
 % The following commands define the information used to generate title and
 % abstract pages. The following entries should be always specified:
 
-\title{Laskennalliset metriikat ohjelmakoodin laadun mittaamiseen}
+\title{Metriikat ohjelmiston laadun mittaamiseen}
 \author{Janne Haapsaari}
 \date{\today}
 \level{Aine}
-\abstract{Tiivistelmä.}
+\abstract{
+  \begin{itemize}
+    \item Johdanto
+    \begin{itemize}
+      \item Konteksti (kuka tarvitsee, mitä, miksi ongelma)
+      \item Tutkimuskysymyksen ja -menetelmän asettaminen
+      \item Tulosten yhteenveto
+      \item Lukujen roolitus
+    \end{itemize}
+    \item Luku 2 - Ohjelmiston laatu?
+      \begin{itemize}
+        \item Konteksti ja käsitteet
+        \item Haasteet ja arviointikriteerit
+        \item Arvote
+        \item Tutkimuskysymyksen analyysi
+      \end{itemize}
+    \item Luku 3 - Metriikat?
+      \begin{itemize}
+        \item Osaongelmien ratkaiseminen
+        \item Yksityiskohtien arviointi ja rinnastus kirjallisuuteen
+      \end{itemize}
+    \item Luku N
+      \begin{itemize}
+        \item Evaluiointi eli johtopäätösten tekeminen
+        \item Analysis, evaluation, experiences, recommendations, future improvement needs
+      \end{itemize}
+    \item Yhteenveto
+      \begin{itemize}
+        \item Mihin pyrittiin, miten ratkaistiin?
+        \item Yhteenveto tuloksista ja niiden uskottavuudesta
+        \item \textbf{Tulosten impakti}.
+      \end{itemize}
+  \end{itemize}
+}
 
 % The following can be used to specify keywords and classification of the paper:
 
@@ -114,7 +147,7 @@
 \frontmatter      % roman page numbering for front matter
 
 \maketitle        % title page
-%\makeabstract     % abstract page
+\makeabstract     % abstract page
 
 \tableofcontents  % table of contents
 
@@ -124,66 +157,178 @@
 
 \section{Johdanto}
 
-Ohjelmistot ovat laajoja ja monimutkaisia kokonaisuuksia, joille on ominaista tarve kehittyä ja muuttua. Ohjelmiston elinkaaren aikana siihen aiheutuu muutoksia muun muassa uusien ominaisuuksien, muuttuvan ymppäristön sekä korjausta vaativien virheiden ansiosta. Muutokset ovat käytännössä väistämättömiä ja tämä tekee ohjelmistojen suunnittelusta haasteellista. On vaikea määritellä laajaa kokonaisuutta ennakkoon tietämättä tulevasta.
+Ohjelmisto on kokonaisuus, jonka muodostavat sovelluksen lähdekoodi, prosessit, dokumentaatio ja tieto, jotka liittyvät ja joita tarvitaan järjestelmän toimintaan~\cite{IEEE90, ISO9000}. Elinkaarensa aikana ohjelmiston on sopeuduttava muutoksiin, joita aiheutuu muun muassa uusien vaatimuksien, muuttuvan ympäristön, korjausta vaativien virheiden seurauksena. Muutokset ohjelmistoon ovat väistämättömiä, ja siksi niihin tulee varautua. Ohjelmiston toiminnallisuuden toteuttamiseen on usein monia ratkaisumalleja eikä sopivimman ratkaisun valitseminen ole helppo tehtävä~\cite{CK94}. Varsinkin jälkikäteen tehtävät muutokset ovat usein vaikeata ja tekevät ohjelmistokehityksestä haastavaa.
 
-Laadukkaan ohjelmiston tuottaminen on vielä edellistäkin haasteellisempaa. Ohjelmiston laadun arviointi ja mittaaminen on eräs ohjelmistoteollisuuden keskeisiä tutkimuskohteita. Kirjallisuudessa on esitetty lukuisia metriikoita ohjelmistojen laadun mittaamiseen.
+Ohjelmiston koon kasvaessa se monimutkaistuu ja kykymme ymmärtää sen toteutusta laskee. Ohjelmistometriikoiden on tarkoitus auttaa kehittäjiä ymmärtämään paremmin ohjelmiston toimintaa, ohjata ja auttaa arvioimaan kehitysprosessia. Erilaisia ohjelmistometriikoita on esitetty kirjallisuudessa lukuisia~\cite{M76, H77, CK94, GKMS00, ZN08} ja niitä on tutkittu koko ohjelmistoteollisuuden olemassaolon ajan. Ohjelmistometriikat tarjoavat automatisoitavia menetelmiä arvioimaan ohjelmiston laatua ja tuotantoprosessin toimivuutta. Ohjelmiston laadullinen arviointi on tuotantovaiheessa tärkeää sillä virheiden korjaaminen jälkikäteen on paitsi vaikeampaa myös kalliimpaa. Muutoksien seurauksena suuri osa ohjelmistoprojektien budjeteista kuluu ohjelmiston ylläpitovaiheeseen~\cite{CALO94, G83}. Myös ohjelmistoprojektin toimivuuden arvioiminen on tärkeää, jotta rajalliset resurssit kyetään käyttämään parhaalla mahdollisella tavalla.
+
+Ohjelmistometriikat voidaan jakaa itse ohjelmistoa (software product metrics) mittaaviin ja ohjelmistotuotantoprosessia (software process) mittaaviin metriikoihin~\cite{LH93}. Tämä tutkielma on kirjallisuuskatsaus ohjelmistoa mittaaviin metriikoihin. Ohjelmistoa mittaavat metriikat ovat perinteisesti olleet regressiopohjaisia ja pyrkineet muodostamaan arvioita virheiden määrästä ohjelmistossa ja paikantamaan virheherkkiä ohjelmiston osa-alueita. Viime vuosina perinteisten metriikoiden rinnalle on tullut kokonaisvaltaisia metriikoita. Kokonaisvaltaiset metriikat rakentuvat perinteisten metriikoiden varaan, mutta ottavat lisäksi huomioon epävarmuustekijöitä ja syy-seuraussuhteita.
+
+Tässä tutkielmassa esitellään erilaisia ohjelmistometriikoita ja niiden kykyä arvioida ohjelmiston laatua. Esittelen oliopohjaiseen suunnitteluun tarkoitetun metriikan~\cite{CK91, CK94}, ohjelmiston muutokseen perustuvan koodikirnun (code churn)~\cite{NB05} ja Bayes-verkkopohjaisen (Bayes Belief Network) metriikan~\cite{FNMHMKM07}.
+
+\newpage
+
+\section{Ohjelmiston laadun arviointi}
+
+Ohjelmiston laadun määrittäminen ei ole yksiselitteinen asia, sillä laatu merkitsee eri sidosryhmille erilaisia asioita. Määritelmiä ohjelmiston laadulle löytyy useita. IEEE määrittelee ohjelmiston laadun sen komponentin tai prosessin kykynä täyttää sille asetetut vaatimukset sekä asiakkaan tai käyttäjän sille asettamat vaatimukset ja odotukset~\cite{IEEE90}. Kansainvälinen ISO9000 -standardi määrittelee ohjelmiston laadun sen ominaispiirteiden kokonaisuutena, jotka vaikuttavat ohjelmiston kykyyn täyttää sen asetettuja tai oletettuja tarpeet~\cite{ISO9000, MD06}. Juran muotoilee laadun vapaudeksi virheistä~\cite{JGB74}. Ohjelmiston laatu on kokonaisuus ohjelmiston ominaisuuksia, jotka vastaavat asiakkaan tarpeita ja siten mahdollistavat tuotetyytyväisyyden~\cite{JGB74}. Pressmanin mukaan laadukkaan ohjelmiston on noudatettava sille täsmällisesti määriteltyjä toiminnallisuus- ja tehokkuusvaatimuksia, eksplisiittisesti dokumentoituja käytäntöjä sekä vaatimuksia joita voidaan olettaa löytyvän ammattimaisesta sovelluksesta~\cite{PI92}.
+
+Ohjelmiston laadulle on kansainvälinen standardi ISO 25010~\cite{ISO25010}. Standardi esittelee ohjelmiston laatumallin, joka koostuu ulkoisista ja sisäisistä laatutekijöistä. Laatumallin avulla voidaan määrittää ohjelmiston laadulliset kriteerit. Ulkoiset laatutekijät kuvaavat ohjelmiston toiminnallisuutta ja käyttäjäkokemusta. Ulkoisia laatutekijöitä ovat muun muassa toiminnallinen sopivuus, käytettävyys ja luotettavuus. Sisäiset laatutekijät kuvaavat ohjelmiston sisäistä toteutusta ja rakennetta. Sisäisiä laatutekijöitä ovat suorituskyky, turvallisuus, yhteensopivuus, siirrettävyys ja ylläpidettävyys. Korostaakseen käytettävyyden merkitystä ohjelmiston laadun arvioimisessa, standardissa määritellään erikseen ohjelmiston käytön laatu. Ohjelmiston käytön laatu koostuu toiminallisuudesta, toiminnallisuuden tehokkuudesta, käyttäjätyytyväisyydestä, käyttöturvallisuudesta ja käytettävyydestä.
+
+Selvä yhtäläisyys monille ohjelmiston laadun määritelmille on asiakaslähtöisyys ja käyttäjätyytyväisyys. Laadukkaan ohjelmiston on paitsi suoriuduttava hyvin sille asetetuista toiminnallisuus- ja tehokkuusvaatimuksista, myös varauduttava muutoksiin. Mikäli muutoksiin ei osata varautua, saattaa edessä olla tilanne jossa jokainen uusi muutos järjestelmään aiheuttaa keskimäärin yhden uuden virheen ohjelmistossa~\cite{LB85}. Tällaisessa tilanteessa ohjelmistoa on vaikea ylläpitää, eikä virheiden määrä ohjelmistossa ei enää laske. Lisäksi ohjelmistotuotantoprojekteissa on ulkoisia tekijöitä, kuten aikataulu, henkilöstöresurssit ja budjetti, jotka vaikuttavat välillisesti tuotettavan ohjelmiston laatuun.
+
+Ohjelmistoteollisuudella on moneen muuhun teollisuuden alaan verrattuna huono maine projektien onnistumisen suhteen. Tutkimusten mukaan jopa 60-80\% ohjelmistoprojekteista ylittävät alkuperäiset arviot aikataulusta ja budjetista~\cite{MJ03}. Heikkoa tulosta mahdollisesti selittää se, että ohjelmistoprojektien arviointi on perustunut pitkälti asiantuntija-arvioihin. Tilanteen parantamiseksi kehitetty niin ohjelmistotuotantomenetelmiä kuin automatisoituja metriikoita ohjelmiston laadun ja monimutkaisuuden mittaamiseen. Ohjelmistotuotantomenetelmät jäävät tämän tutkielman aiheen ulkopuolelle.
+
+\section{Ohjelmistometriikat}
+
+[!!! Tähän tulee vielä Criterias for software metrics (Weuyker) !!!]\newline
+
+Ohjelmistometriikoita on tutkittu koko sen ajan kun ohjelmistoja on tuotettu. Kattavasta tutkimuspohjasta huolimatta termi ohjelmistometriikka ei ole käsitteenä selkeä. Ohjelmistometriikasta on tullut yleinen nimitys laajalle joukolle mittaavia menetelmiä ohjelmistotuotannon parissa~\cite{FM00}. Joukkoon lukeutuvat ohjelmiston tunnusomaisia ominaisuuksia laskevat metriikat, tuotantoon vaadittavia resursseja ja ohjelmiston laatua arvioivat mallit ja ohjelmistosta löydettyjä virheitä dokumentoiva laadunvalvonnallinen puoli.
+
+Kirjallisuudessa ensimmäiset ohjelmistometriikat esitettiin 1960-luvulla. Metriikat pohjautuivat ohjelmiston lähdekoodin fyysiseen kokoon. Martin esitti menetelmän, jossa laskettiin lähdekoodirivien (SLOC - Source Lines of Code) määrää~\cite{M65}.  Halstead esitti menetelmän, joka laski operaattoreita ja operandeja lähdekoodista~\cite{H72, H77}. McCabe esitti kuuluisan syklomaattisen kompleksisuuden (Cyclomatic complexity) menetelmän, joka mittasi kontrollipolkujen määrää ohjelmistossa.~\cite{M76}. Ohjelmistometriikoilla pyrittiin arvioimaan tuottavuutta ja ohjelmiston toteutukseen ja testaukseen vaadittavaa työmäärää ja resursseja.
+
+Ohjelmiston muutokseen perustuvat tekniikat ottavat hieman erilaisen lähtökohdan perinteisiin metriikoihin nähden. Ohjelmiston elinkaaren aikana kaikki siihen tehtävät muutokset eivät suinkaan ole seurausta korjatuista virheistä. Uusien ominaisuuksien lisääminen tai muuttuviin vaatimusmääreisiin vastaaminen, vaatii usein kokonaan uuden koodin lisäämistä ohjelmistoon. Lisäysten mukana ohjelmistoon saattaa tulla myös uusia virheitä. Hiljattain lisätty koodi on usein vähemmän testattua ja siten käytössä olleeseen koodiin verrattuna todennäköisempää sisältämään virheitä~\cite{ME98}.
 
 
-\section{Ohjelmiston laatu}
 
-Millainen on laadukas ohjelmisto? Ohjelmiston laatu on monitahoinen määritelmä. Osa kokonaisuutta.
+\section{Oliopohjaiset metriikat}
 
-Ohjelmiston pitää suoriutua sille määritetyistä tehtävistä.
+Oliopohjaisen ohjelmistosuunnittelun yleistyessä 1980-luvun loppupuolella, havaittiin että olemassa olevat ohjelmistometriikat eivät ottaneet huomioon oliopohjaiselle suunnittelulle tyypillisiä ominaispiirteitä~\cite{LH93, CK94}. Tyypillisiä oliopohjaisen ohjelmoinnin piirteitä ovat oliot, luokat, perintä ja luokkien välinen kommunikointi viestien välityksellä. Näille piirteille ei ole olemassa vastaavia piirteitä proseduraalisessa ohjelmoinnissa, eikä siten myöskään käytössä olleissa ohjelmistometriikoissa. Tarvittiin siis ohjelmistometriikoita, jotka vastasivat oliopohjaisen suunnittelun tarpeisiin.
 
-Mitä haluan tutkia?
+Chidamber ja Kemerer esittivät joukon olio-ohjelmointiin suunniteltuja ohjelmistometriikoita~\cite{CK91, CK94}. He kritisoivat että aikaisemmilta metriikoilta puuttuu täsmällinen teoreettinen ja matemaattinen pohja. Oliopohjaisen suunnittelun perustaksi he valitsivat Grady Boochin määritelmän~\cite{B94}. Määritelmän mukaan oliopohjaisen suunnittelussa on neljä tärkeää askelta.
+\begin{enumerate}
+    \item Luokkien ja olioiden tunnistaminen (Identification of Classes), jossa ongelmakenttä mallinnetaan luokiksi ja olioiksi.
+    \item Merkityksen tunnistaminen (Identify the Semantics), jossa edellisessä askeleessa muodostettujen luokkien elinkaari määritellään.
+    \item Riippuvuuksien tunnistaminen (Indentify Relationships). Luokkien väliset riippuvuudet, kuten perintä ja näkyvyydet, määritellään.
+    \item Luokkien implementaatio (Implementation of Classes). Luokkien sisäinen rakenne määritellään.
+\end{enumerate}
+
+Chidamberin ja Kemererin oliopohjaiset ohjelmistometriikat koostuvat kuudesta ohjelmiston laatua arvioivaa mittaria.
+
+\begin{enumerate}
+    \item \textbf{Painotettu luokan metodien määrä} (Weighted Methods per Class, WMC). Metodien määrä ja monimutkaisuus toimivat ennusmerkkinä työmäärästä ja -ajasta, joka luokan kehitykseen ja ylläpitoon kuluu. Lisäksi suuri metodien määrä luokassa kasvattaa sen vaikutusta aliluokissa. Luokat, joissa on suuri määrä metodeja, ovat usein spesifisiä ja tämä alentaa luokan uudelleenkäytettävyyttä.
+
+    \item \textbf{Perimäpuun syvyys} (Depth of Inheritance Tree, DIT). Mitä syvemmällä luokka on perimäpuussa, sitä suurempi osa luokan metodeista on perittyjä. Syvä perimäpuu indikoi myös ohjelmiston suunnitelman monimutkaisuutta. Yliluokkien määrän kasvaessa lisääntyy myös riski, että jokin yliluokista aiheuttaa ongelmia luokalle.
+
+    \item \textbf{Välittömien aliluokkien määrä} (Number of Children, NOC). Aliluokkien suuri määrä indikoi luokkien uudelleenkäyttöä. Luokan aliluokkien määrän kasvaessa myös riski perinnän väärinkäytöstä kasvaa. Suuri aliluokkien määrä saattaa myös indikoida sitä, että yliluokan abstraktiotaso on väärä. Välittömien aliluokkien määrä indikoi luokan vaikutusvallan määrää ohjelmiston suunnittelussa. Tällöin luokka vaatii usein kattavampaa testausta.
+
+    \item \textbf{Luokkien välinen kytkeytyvyys} (Coupling between object classes, CBO). Luokan kytkeytyvyys mittaa niiden luokkien määrää, johon luokka on kytkeytynyt. Liiallinen luokkien välinen kytkeytyvyys on haitallista modulaariselle suunnittelulle ja heikentää luokkien uudelleenkäytettävyyttä. Luokkien välisen kytkeytyvyyden kasvaessa, luokan kapselointi (encapsulation) vähenee ja muutosten tekeminen vaikeutuu. Kytkeytyvyyden mittaaminen on avuksi määriteltäessä ohjelmiston osien testattavuutta.
+
+    \item \textbf{Luokan vaste} (Response For a Class, RFC). Luokan vaste mittaa niiden metodien määrää, joita luokan ilmentymä voi kutsua vastaukseksi saamaansa viestiin. Mitä suurempi metodien määrä, sitä monimutkaisempi luokka on.
+
+    \item \textbf{Metodien yhdenmukaisuuden puute} (Lack of Cohesion in Methods, LCOM). Metodien yhdenmukaisuuden puute mittaa metodiparien, jotka eivät jaa instanssimuuttujia, ja metodiparien, jotka jakavat instanssimuuttujia, välistä erotusta. Suureen arvo on nolla mikäli erotus on negatiivinen. Suureen suuri arvo indikoi sitä, että luokka yrittää tehdä liian montaa asiaa. Tällä on negatiivinen vaikutus luokan testattavuuteen.
+\end{enumerate}
+
+CK-metriikat on suunniteltu tarjoamaan analyyttisia ominaisuuksia ohjelmiston laadun arvioimiseen. Metriikoiden on tarkoitus olla kehittäjälle helposti omaksuttavia ja mahdollistaa mittauksen helppo automaattinen suorittaminen. Huomionarvoista on miten metriikkoja apuna käyttäen voi löytää suunnitteluvirheitä ja -rikkeitä jo ennen toteutusvaihetta~\cite{CK94}. 
+
+CK-metriikoiden on osoitettu sisältävän toivottuja ominaisuuksia oliopohjaisen ohjelmiston laadun ja monimutkaisuuden mittaamiseen. Metriikoiden on osoitettu ennustavan ohjelmiston virheherkkiä osa-alueita jo ohjelmiston suunnitteluvaiheessa.~\cite{CK94, BBM96, SK03}. Lisäksi CK-metriikoiden on osoitettu ennustavan paremmin ohjelmiston virheherkkyttä kuin perinteiset lähdekoodin fyysistä kokoa mittaavat metriikat~\cite{BB96}. Metriikoiden tehokkuuden on kuitenkin havaittu vaihtelevan eri ohjelmointikielillä ja -ympäristöissä~\cite{SK03}.
+
+
+\section{Koodikirnu}
+
+Koodikirnu on ohjelmistometriikka, joka mittaa ohjelmistoon tehtäviä muutoksia ja niiden laajuutta tietyllä aikavälillä~\cite{NB05}. Mittarin pohjana on oletus, että useasti muuttuva ohjelmiston osa sisältää enemmän virheitä kuin osa, joka muuttuu vähemmän samalla aikavälillä. Koodikirnun tarvitsevat tiedot muutoksista ohjelmistoon, saadaan helposti ohjelmiston versionhallintajärjestelmästä.
+
+Nagappanin ja Ballin esittelemä suhteellinen koodikirnu mittaa muutosten määrä ohjelmistossa tietyllä aikavälillä. Koodikirnu koostuu joukosta absoluuttisia mittareita.
+
+\begin{enumerate}
+    \item \textbf{Koodirivien yhteenlaskettu määrä}
+
+        Ohjelmiston kaikkien lähdekooditiedostojen koodirivien yhteenlaskettu summa.
+    \item \textbf{Muokattujen koodirivien määrä}
+
+        Tarkastellulla aikavälillä ohjelmistoon lisättyjen ja muokattujen koodirivien yhteenlaskettu summa.
+    \item \textbf{Poistettujen koodirivien määrä}
+
+        Tarkastellulla aikavälillä ohjelmistosta poistettujen koodirivien yhteenlaskettu summa.
+    \item \textbf{Tiedostojen määrä}
+
+        Ohjelmiston lähdekooditiedostojen yhteenlaskettu summa.
+    \item \textbf{Muutoksien ajanjakso}
+
+        Yhteen tiedostoon kohdistuneiden muutosten ajanjakson kesto.
+    \item \textbf{Muutosten määrä}
+
+        Tarkastellulla ajanjaksolla ohjelmiston lähdekooditiedostoihin tehtyjen muutosten määrä.
+    \item \textbf{Muokattujen tiedostojen määrä}
+
+        Ohjelmiston muokattujen lähdekooditiedostojen määrä.
+\end{enumerate}
+
+Absoluuttisten mittarien pohjalle on Nagappan ja Ball ovat kehittäneet joukon suhteellisia mittareita, joiden arvojen kasvun on osoitettu korreloivan virheiden määrän kasvun kanssa~\cite{NB05}.
+
+\begin{enumerate}
+    \item \textbf{Muokattujen koodirivien määrä / Koodirivien yhteenlaskettu määrä}
+
+        Muokattujen koodirivien suuri määrä suhteessa koodirivien kokonaismäärään ennakoi suurta virhetiheyttä (defect density) ohjelmistossa.
+    \item \textbf{Poistettujen koodirivien määrä / Koodirivien yhteenlaskettu määrä}
+
+        Poistettujen koodirivien suuri määrä suhteessa koodirivien kokonaismäärään ennakoi suurta virhetiheyttä ohjelmistossa.
+    \item \textbf{Muokattujen tiedostojen määrä / Tiedostojen määrä}
+
+        Muokattujen tiedostojen suuri määrä suhteessa tiedostojen kokonaismäärään kasvattaa todennäköisyyttä, että muokatut tiedostot lisäävät uusia virheitä ohjelmistoon.
+    \item \textbf{Muutosten määrä / Muokattujen tiedostojen määrä}
+
+        Usein muokatut tiedostot ovat todennäköisempiä lisäämään virheitä ohjelmistoon verrattuna tiedostoihin, joita muokataan harvemmin. Mittari on verrattavissa muokattujen tiedostojen määrän ja tiedostojen määrän suhteeseen.
+    \item \textbf{Muutoksien ajanjakso / Tiedostojen määrä}
+
+        Mikäli muutoksen tekemiseen kuluva aika on suuri suhteessa tiedostojen määrään, kasvaa todennäköisyys että ohjelmiston tiedostot ovat monimutkaisia. Monimutkaisten tiedostojen muokkaaminen on vaikeaa ja lisää riskiä uusien virheiden lisäämisestä ohjelmistoon. Mittarin arvon kasvu indikoi kasvua ohjelmiston virhetiheydessä.
+    \item \textbf{Muokattujen ja poistettujen koodirivien määrä / Muutoksien ajanjakso}
+
+       Suuri muokattujen ja poistettujen koodirivien määrän tulisi kasvattaa myös ajanjakson pituutta. Suuri mittarin arvo ennustaa suurempaa virhetiheyttä ohjelmistossa. Arvo on verrattavissa muutosten ajanjakson ja tiedostojen määrän suhteeseen. 
+
+    \item \textbf{Muokattujen koodirivien määrä / Poistettujen koodirivien määrä}
+
+        Muokattujen koodirivien suuri määrä suhteessa poistettujen koodirivien määrään arvioi lisätyn koodin määrää ohjelmistossa. Lisättäessä ohjelmistoon uusia toiminnallisuuksia mittarin arvo kasvaa. Uusi koodi on usein vähemmän testattua ja siten saattaa sisältää enemmän virheitä. Arvo on vertailukelpoinen ensimmäisen ja toisen mittarin kanssa.
+    \item \textbf{Muokattujen ja poistettujen koodirivien määrä / Muutosten määrä}
+
+        Muokattujen ja poistettujen koodirivien ja muutosten määrän suhde mittaa todellisen muutoksen määrää ohjelmistossa. Mittarin suuri arvo ennustaa suurempaa virhetiheyttä ohjelmistossa. 
+\end{enumerate}
+
+Koodikirnun tietojen keruu perustuu täysin versionhallintasovelluksen tarjoamaan informaation. Mittavirhe on tällöin pieni, mutta informaatioon vaikuttavat kehittäjien käytänteet. Jos kehittäjä tallentaa versionhallintajärjestelmään useita muutoksia yhdellä kertaa, saattaa osa muutoksista jäädä havaitsematta~\cite{NB05}. Lisäksi mitattavan ajanjakson pituus voi kasvaa merkittävästi kehittäjän toimesta. Myös tarkasteltavan ajanjakson pituus voi kasvaa mikäli kehittäjä ei tallenna muutoksia välittömästi versionhallintajärjestelmään. Mittareiden vertailukelpoisuus vähentää käyttäjän toimista johtuvaa virhettä. Parhaiden mahdollisten tulosten saamiseksi vaaditaan kehittäjiltä sovittuja yhteisiä käytänteitä muutosten tallentamisessa versionhallintajärjestelmään.
+
+Koodikirnun suhteellisten mittareiden on osoitettu olevan erinomaisia ennustamaan ohjelmiston virhetiheyttä~\cite{NB05}. Nagappan ja Bell tekevät koodikirnusta seuraavat johtopäätökset.
 
 \begin{itemize}
-  \item Yleiset mallit ohjelmiston laadun arviointiin
-  \item Mallit olio-pohjaisille ohjelmistoille.
-  \item Versiohistoriapohjaiset mallit
+    \item Suhteellisen koodikirnun mittareiden kasvu korreloi ohjelmiston virhetiheyden kasvun kanssa.
+    \item Suhteelliset mittarit ovat parempia selittämään ohjelmiston virhetiheyttä kuin absoluuttiset mittarit.
+    \item Suhteellinen koodikirnu toimii tehokkaana ennusteena ohjelmiston virhetiheydestä.
+    \item Suhteellinen koodikirnu pystyy erottelemaan virheellisen ja toimivan ohjelmiston toisistaan.
 \end{itemize}
 
-\begin{itemize}
-  \item Konteksti (kuka tarvitsee, mitä, miksi ongelma)
-  \item Tutkimuskysymyksen ja -menetelmän asettaminen
-  \item Tulosten yhteenveto
-  \item Lukujen roolitus
-\end{itemize}
 
-\section{Luku 2}
+\section{Bayes-verkot}
 
-\begin{itemize}
-  \item Konteksti ja käsitteet
-  \item Haasteet ja arviointikriteerit
-  \item Arvote
-  \item Tutkimuskysymyksen analyysi
-\end{itemize}
+To be continued\dots
 
-\section{Luku 3}
 
-\begin{itemize}
-  \item Osaongelmien ratkaiseminen
-  \item Yksityiskohtien arviointi ja rinnastus kirjallisuuteen
-\end{itemize}
 
-\section{Luku N}
+\section{Vertailu}
 
-\begin{itemize}
-  \item Evaluiointi eli johtopäätösten tekeminen
-  \item Analysis, evaluation, experiences, recommendations, future improvement needs
-\end{itemize}
+Tässä osiossa verrataan ja evaluoidaan esitettyjä ohjelmistometriikoita. Jonkinlaisia johtopäätöksiäkin olisi syytä muodostaa. Analyysia, evaluaatiota, kokemuksia, suositteluja, tulevaisuuden tutkimuskohteita\dots
+
+Metriikat eivät toimi kovin hyvin yleisesti, vaan niiden tehokkuus vaihtelee eri ohjelmointikielillä. Tämän takia ohjelmistometriikat tulee valita käytössä olevan ohjelmointikielen ja -ympäristön mukaan. 
+
 
 \section{Yhteenveto}
 
-\begin{itemize}
-  \item Mihin pyrittiin, miten ratkaistiin?
-  \item Yhteenveto tuloksista ja niiden uskottavuudesta
-  \item \textbf{Tulosten impakti}.
-\end{itemize}
+Tässä osiossa tehdään yhteenveto tutkielmasta. Mihin pyrittiin, mitä ratkaistiin? Yhteenveto tuloksista ja niiden uskottavuudesta. Tulosten impakti?
 
-% Write some science here.
-Tähän tulee meidän hieno referaatti~\cite{McGabe}.
 
+\section{Scratch buffer - to be removed\dots}
+
+DeMarcon aikoinaan kirjoitti "You can't control what you can't measure."~\cite{DM86}. Sittemmin hän on sanonut olevansa vaivaantunut tavasta, jolla hän lausetta kirjassaan käytti.
+
+Virheiden määrää ohjelmistossa on vaikeaa arvioida luotettavasti.
+
+Ohjelmiston laatu ja sen arviointi ovat olleet eräitä ohjelmistoteollisuuden keskeisistä tutkimuskohteista.
+
+Laadukas ohjelmisto vaatii, että kaikki neljä osa-aluetta on hyvin toteutettu. Ohjelmiston laadunvarmistuksen tulee ottaa huomioon ohjelmakoodin laadun lisäksi käytettyjen prosessien, dokumentaation ja tiedon laatu~\cite{G04}.
+
+Ohjelmistometriikat tarjoavat määrällisen (quantitative) apuvälineen ymmärtämään ohjelmistotuotantoprosessin tehokkuutta ja laadullisten ongelma-alueiden paikantamiseen ohjelmistossa~\cite{PI92}.
+
+Ohjelmistometriikat ovat johdon tukena määrällisessä ja laadullisessa päätöksenteossa, riskien hallinnassa ja minimoimisessa.
+
+Vaikka ohjelmistometriikoista on pyritty tekemään yleisiä, on huomattu että metriikoiden luotettavuus vaihtelee eri ohjelmointikielillä.
+
+Ohjelmistometriikoita kohtaan on osoitettu erilaista kritiikkiä. Esimerkiksi useat metriikoista vaativat muutoksia eri ohjelmointikielille.
 
 
 % --- References ---
@@ -208,5 +353,6 @@ Tähän tulee meidän hieno referaatti~\cite{McGabe}.
 % \appendix
 %
 % \section{Esimerkkiliite}
+
 
 \end{document}
