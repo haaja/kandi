@@ -1,0 +1,47 @@
+\documentclass[a4paper]{article}
+
+% --- General packages ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[finnish]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsfonts,amsmath,amssymb,amsthm,booktabs,color,enumitem,graphicx}
+\usepackage[pdftex,hidelinks]{hyperref}
+
+% Automatically set the PDF metadata fields
+\makeatletter
+\AtBeginDocument{\hypersetup{pdftitle = {\@title}, pdfauthor = {\@author}}}
+\makeatother
+
+\title{Koodikirnu ohjelmiston laadun määrittelyn tukena}
+\author{Janne Haapsaari}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+Ohjelmisto on monimutkainen kokonaisuus, joka koostuu useasta osasta. Laadukas ohjelmisto täyttää luotettavasti sille asetetut toiminnallisuus- ja tehokkuusvaatimukset. Laadukkaan ohjelmiston tuottaminen ei ole helppo tehtävä, sillä monimutkaisen kokonaisuuden suunnittelu on etukäteen haastavaa. Suunnittelua vaikeuttavat ohjelmistoon sen elinkaaren aikana tehtävät muutokset. Muutostarpeita aiheuttavat muun muassa uudet vaatimusmääreet, muuttuva toimintaympäristö ja korjausta vaativat virheet ohjelmistossa. Muutoksia on käytännössä mahdotonta välttää ja tarve mukautua on erityisesti ohjelmistoille tyypillinen ominaispiirre. Ohjelmiston muuttuessa sen koko yleensä kasvaa, minkä seurauksena ohjelmisto monimutkaistuu ja samalla kykymme ymmärtää sen toteutusta laskee. Kun emme ymmärrä ohjelmiston toteutusta, on siihen vaikea tehdä muutoksia ja tehdyt muutokset lisäävät helposti virheiden määrää ohjelmistossa.
+
+Kirjallisuudessa on esitetty lukuisia ohjelmistometriikoita, joiden tarkoituksena on auttaa kehittäjiä ymmärtämään paremmin ohjelmiston toimintaa ja arvioimaan tuotettavan ohjelmiston laatua. Yksi ohjelmiston laatua arvioivista metriikoista on suhteellinen koodikirnu.
+
+Suhteellinen koodikirnu mittaa ohjelmistoon tietyllä aikavälillä tehtäviä muutoksia ja määrittää muutosten laajuutta. Metriikan pohjana on oletus, että useasti muuttuva ohjelmiston osa sisältää enemmän virheitä kuin osa, joka muuttuu vähemmän samalla aikavälillä. Ohjelmistossa tapahtuvaa muutosta mitataan kuuden ehdottoman mittarin avulla. Ehdottomat mittarit ovat koodirivien yhteenlaskettu määrä, muokattujen koodirivien määrä, poistettujen koodirivien määrä, tiedostojen määrä, muutoksien ajanjakso, muutosten määrä ja muokattujen tiedostojen määrä. Ehdottomat mittarit eivät kuitenkaan sellaisenaan ole riittävän tarkkoja ennustamaan ohjelmiston virhetiheyttä tai paikantamaan virheherkkiä ohjelmiston osia. Ongelma ratkeaa käyttämällä ehdottomien mittarien pohjalta rakennettuja suhteellisia mittareita.
+
+Koodikirnun käyttämät suhteelliset mittarit ovat seuraavat.
+\begin{enumerate}[itemsep=0mm]
+  \item Muokattujen koodiriven määrän ja koodirivien yhteenlasketun määrän suhde.
+  \item Poistettujen koodirivien määrän ja koodirivien yhteenlasketun määrän suhde.
+  \item Muokattujen tiedostojen määrän ja tiedostojen määrän suhde.
+  \item Muutosten määrän ja muokattujen tiedostojen määrän suhde.
+  \item Muutoksien ajanjakson ja tiedostojen määrän suhde.
+  \item Muokattujen ja poistettujen koodirivien ja muutoksien ajanjakson suhde.
+  \item Muokattujen koodirivien määrän ja poistettujen koodirivien määrän suhde.
+  \item Muokattujen ja poistettujen koodirivien määrän ja muutosten määrän suhde.
+\end{enumerate}
+
+Suhteellisen koodikirnun mittavirhe on pieni, sillä koodikirnun tarvitsema tieto voidaan kerätä suoraan ohjelmistotuotantoprojektissa käytettävästä versionhallintajärjestelmästä. Suhteellisia mittareita voidaan myös verrata keskenään, jolloin virhe yksittäisessä mittarissa on helpompi havaita. Koodikirnun antamiin tuloksiin vaikuttavat kuitenkin yksittäisten kehittäjien käytänteet. Esimerkiksi tapauksessa, jossa kehittäjä tallentaa versionhallintajärjestelmään useita muutoksia yhdellä kertaa, saattaa osa muutoksista jäädä havaitsematta. Myös tarkasteltavan ajanjakson pituus saattaa vääristyä, jos kehittäjä ei tallenna tekemiään muutoksia heti ne tehtyään. Suhteellisten mittarien arvojen keskinäisellä vertailulla voidaan vähentää kehittäjän toimista johtuvaa virhettä. Koodikirnu toimii parhaiten ympäristöissä, joissa on sovitut yhteiset käytänteet muutosten tallentamisesta versionhallintajärjestelmään. 
+
+Koodikirnun suhteellisten mittareiden on osoitettu olevan erinomaisia ennustamaan ohjelmiston virhetiheyttä. Suhteellinen koodikirnu auttaa myös paikantamaan virheherkkiä ohjelmiston osia. Tulosten perusteella resursseja voidaan kohdentaa erityisesti ohjelmiston virheherkkien osien testaamiseen jo tuotantovaiheessa. Virheiden löytäminen ja korjaaminen mahdollisimman aikaisessa vaiheessa on paitsi helpompaa myös kustannustehokkaampaa. Jokainen korjattu virhe vähentää jäljelle jäävien virheiden määrää ja parantaa ohjelmiston laatua. Suhteellinen koodikirnu on helposti sisällytettävissä osaksi ohjelmistotuotantoprosessia, sillä sen tarvitsema tieto tallennetaan joka tapauksessa versionhallintajärjestelmään. Koodikirnu on lisäksi täysin automatisoitavissa, jolloin sen käytöstä aiheutuvat haitat ovat minimaaliset suhteessa siitä saataviin hyötyihin.
+
+\end{document}
